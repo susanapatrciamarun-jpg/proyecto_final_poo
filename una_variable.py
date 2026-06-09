@@ -188,6 +188,7 @@ class MiVentana(wx.Frame):
         menu_bar.Append(menu_convertir, "convertir")
         self.SetMenuBar(menu_bar)
         self.Bind(wx.EVT_MENU, self.salir, self.menu_salir)
+        
         # botones de longitud
         self.Bind(wx.EVT_MENU, self.opcion_cm, self.long_cm)
         self.Bind(wx.EVT_MENU, self.opcion_pies, self.long_pies)

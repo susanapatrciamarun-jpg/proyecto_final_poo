@@ -37,8 +37,6 @@ class MiPanel(wx.Panel):
         unidad1 = self.datos1.GetStringSelection()
         unidad2 = self.datos2.GetStringSelection()
 
-        #print("unidad1:", unidad1)
-        #print("unidad2:", unidad2)
 
         if self.operacion == "Distancia":
             velocidad_kmh = valor1
@@ -193,6 +191,7 @@ class MiFrame(wx.Frame):
         menu_bar = wx.MenuBar()
         menu_calculos = wx.Menu()
 
+
         menu_dtv = wx.Menu()
         self.m_distancia = menu_dtv.Append(
              wx.ID_ANY,
@@ -219,6 +218,9 @@ class MiFrame(wx.Frame):
 )
         self.SetMenuBar(menu_bar)
    
+
+
+
    # botones
         self.Bind(
             wx.EVT_MENU,
@@ -278,6 +280,8 @@ class MiFrame(wx.Frame):
             )
             self.panel.datos1.SetSelection(0)
             self.panel.datos2.SetSelection(0)
+
+    
 
 if __name__ == '__main__':
     app = wx.App(redirect=False)
