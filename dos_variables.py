@@ -1,6 +1,6 @@
 import wx
 
-class MiPanel(wx.Panel):
+class PanelDosVariables(wx.Panel):
 
     def distancia_a_km(self, valor, unidad):
         if unidad == "Metros":
@@ -188,10 +188,10 @@ class MiPanel(wx.Panel):
         self.label2.SetLabel("dato 2")
 
 
-class MiFrame(wx.Frame):
-    def __init__(self):
+class VentanaDosVariables(wx.Frame):
+    def __init__(self , parent = None):
         super().__init__(None, title='convertidor de unidades', size=(600, 300))
-        self.panel = MiPanel(self)
+        self.panel = PanelDosVariables(self)
         menu_bar = wx.MenuBar()
         menu_calculos = wx.Menu()
 
@@ -301,5 +301,5 @@ class MiFrame(wx.Frame):
     
 if __name__ == '__main__':
     app = wx.App(redirect=False)
-    frame = MiFrame()
+    frame = VentanaDosVariables()
     app.MainLoop()

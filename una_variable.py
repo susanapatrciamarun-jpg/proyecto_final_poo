@@ -3,9 +3,10 @@ from logicas.longitud import convertir_longitud
 from logicas.peso import convertir_peso
 from logicas.temperatura import convertir_temperatura
 from logicas.datos import convertir_datos
+#from logicas.eventos_una_variable import
 
 
-class MiPanel(wx.Panel):
+class PanelUnaVariable(wx.Panel):
 
     def convertidor(self, event):
         try:
@@ -84,7 +85,10 @@ class MiPanel(wx.Panel):
             self,
             size=(100,40),
             allowNegative=False,
-            groupDigits=False)
+            groupDigits=False,
+            allowNone = True,
+            value = None
+            )
         
         self.textbox.SetValue(0) 
 
@@ -184,11 +188,11 @@ class MiPanel(wx.Panel):
         self.label_destino.SetLabel("Destino: Ninguno")      
     
 
-class MiVentana(wx.Frame):
+class VentanaUnaVariable(wx.Frame):
 
-    def __init__(self):
+    def __init__(self, parent = None):
         super().__init__(None, title='convertidor de unidades', size=(600, 300))
-        self.panel = MiPanel(self)
+        self.panel = PanelUnaVariable(self)
 
         menu_bar = wx.MenuBar()
         file_menu = wx.Menu()
@@ -264,7 +268,7 @@ class MiVentana(wx.Frame):
         self.Bind(wx.EVT_MENU, self.opcion_terabytes, self.datos_tb)
 
         self.Show()
-        
+
     # eventos
 
     # eventos de longitud
@@ -509,5 +513,5 @@ class MiVentana(wx.Frame):
 
 if __name__ == '__main__':
     app = wx.App(redirect=False)
-    frame = MiVentana()
+    frame = VentanaUnaVariable()
     app.MainLoop()
