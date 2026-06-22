@@ -1,35 +1,13 @@
 import wx
+from logicas.distancia_velocida_tiempo import (
+    calcular_distancia,
+    calcular_velocidad,
+    calcular_tiempo
+)
 
 class PanelDosVariables(wx.Panel):
-
-    def distancia_a_km(self, valor, unidad):
-        if unidad == "Metros":
-            return valor / 1000
-
-        elif unidad == "Kilometros":
-            return valor
-
-        elif unidad == "Yardas":
-            return valor * 0.0009144
-
-        elif unidad == "Millas":
-            return valor * 1.60934
-
-        return 0
-
-    def tiempo_a_horas(self, valor, unidad):
-        if unidad == "Minutos":
-            return valor / 60
-        
-        elif unidad == "Horas":
-            return valor 
-        
-        elif unidad == "Dias":
-            return valor * 24
-        
-        return 0 
-         
-
+    
+    
     def calcular(self, event):
         valor1 = self.textbox1.GetValue()
         valor2 = self.textbox2.GetValue()
@@ -37,49 +15,53 @@ class PanelDosVariables(wx.Panel):
         unidad1 = self.datos1.GetStringSelection()
         unidad2 = self.datos2.GetStringSelection()
 
-
-        if self.operacion == "Distancia":
-            velocidad_kmh = valor1
-            tiempo_horas = self.tiempo_a_horas(valor2, unidad2)
-
-            resultado = velocidad_kmh * tiempo_horas
-
-            resultado_unidad = "km"
+        try:
+            
+            if self.operacion == "Distancia":
                 
+                resultado = calcular_distancia(
+                    valor1,
+                    valor2,
+                    unidad2
+                    )
 
-        elif self.operacion == "Velocidad":
-             
-            distancia_km = self.distancia_a_km(valor1, unidad1)
-            tiempo_horas = self.tiempo_a_horas(valor2, unidad2)
-            
-            if tiempo_horas == 0:
-                self.resultado.SetLabel("el tiempo no puede ser 0")
+                resultado_unidad = "km"
+
+            elif self.operacion == "Velocidad":
+                
+                resultado = calcular_velocidad(
+                     valor1,
+                    unidad1,
+                    valor2,
+                    unidad2
+                    )
+
+                resultado_unidad = "km/h"
+
+            elif self.operacion == "Tiempo":
+                
+                resultado = calcular_tiempo(
+                    valor1,
+                    unidad1,
+                    valor2
+                    )
+
+                resultado_unidad = "horas"
+
+            else:
+                self.resultado.SetLabel(
+                     "Seleccione una operación"
+                     )
                 return
-            
-            resultado = distancia_km / tiempo_horas
 
-            resultado_unidad = "km/h"
+            self.resultado.SetLabel(
+                    f"Resultado {resultado:.2f} {resultado_unidad}"
+                )
 
-        elif self.operacion == "Tiempo":
-             
-            distancia_km = self.distancia_a_km(valor1, unidad1)
-
-            if valor2 == 0:
-                self.resultado.SetLabel("la velocidad no puede ser nunca 0")
-                return
-            
-            resultado = distancia_km / valor2
-
-            resultado_unidad = "horas"
-            
-
-        else:
-            self.resultado.SetLabel("Seleccione una operación")
-            return
-
-        self.resultado.SetLabel(
-            f"Resultado {resultado:.2f} {resultado_unidad}" 
-        )
+        except ValueError as e:
+             self.resultado.SetLabel(
+                str(e)
+                )
 
 
     def __init__(self, parent):

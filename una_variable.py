@@ -4,6 +4,7 @@ from logicas.peso import convertir_peso
 from logicas.temperatura import convertir_temperatura
 from logicas.datos import convertir_datos
 import logicas.eventos_una_variable as eventos
+from logicas.historial import leer_historial_una
 
 class PanelUnaVariable(wx.Panel):
 
@@ -264,17 +265,31 @@ class VentanaUnaVariable(wx.Frame):
         self.datos_tb = menu_datos.Append(wx.ID_ANY, "Terabytes")
 
         menu_convertir = wx.Menu()
+
         menu_convertir.AppendSubMenu(menu_longitud, "longitud")
         menu_convertir.AppendSubMenu(menu_peso, "peso")
         menu_convertir.AppendSubMenu(menu_temp, "temperatura")
         menu_convertir.AppendSubMenu(menu_datos, "datos informaticos")
 
 
+        menu_historial = wx.Menu()
+
+        self.m_ver_historial = menu_historial.Append(
+            wx.ID_ANY,
+            "Ver historial"
+            )
+
+
         menu_bar.Append(file_menu, "archivo")
         menu_bar.Append(menu_convertir, "convertir")
+        menu_bar.Append(menu_historial,"Historial")
         self.SetMenuBar(menu_bar)
         self.Bind(wx.EVT_MENU, self.salir, self.menu_salir)
         
+        
+        # boton de historial
+        self.Bind(wx.EVT_MENU,self.ver_historial,self.m_ver_historial)
+
         # botones de longitud
         self.Bind(wx.EVT_MENU, self.opcion_cm, self.long_cm)
         self.Bind(wx.EVT_MENU, self.opcion_pies, self.long_pies)
@@ -378,7 +393,19 @@ class VentanaUnaVariable(wx.Frame):
         if self.parent:
             self.parent.Show()
 
-        event.Skip()    
+        event.Skip()
+    
+    def ver_historial(self, event):
+        historial = leer_historial_una()
+
+        if historial.strip() == "":
+            historial = "No hay conversiones registradas"
+
+        wx.MessageBox(
+            historial,
+            "Historial de conversiones",
+            wx.OK | wx.ICON_INFORMATION
+            )
 
 
 if __name__ == '__main__':
