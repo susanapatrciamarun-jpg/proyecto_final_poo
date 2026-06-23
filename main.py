@@ -1,17 +1,67 @@
+import os
 import wx
+import wx.lib.agw.advancedsplash as AS
 
 from una_variable import VentanaUnaVariable
 from dos_variables import VentanaDosVariables
 
-
+from guias.manualusuario import abrir_manual
+from guias.ayuda import Ayuda
+ 
 class MiVentana(wx.Frame):
 
     def __init__(self):
         super().__init__(
             None,
             title="Convertidor de Unidades",
-            size=(600, 300)
+            size=(600, 400)
         )
+        # Ocultamos la ventana explícitamente mientras carga el splash
+        self.Hide()
+
+        # Obtener el directorio donde está guardado este script (main.py)
+        bitmapDir = os.path.dirname(os.path.abspath(__file__))
+
+        # --------------------
+        # AGREGADO: Icono de la barra de título (SetIcon)
+        # --------------------
+        # Cambia "mi_logo.ico" o "mi_logo.png" por el nombre real de tu archivo
+        ruta_icono = os.path.join(
+            bitmapDir,
+            "imagenes",
+            "mi_logo.png")
+        
+        if os.path.exists(ruta_icono):
+            # Creamos el objeto Icon. Si usas un PNG, cambia wx.BITMAP_TYPE_ICO por wx.BITMAP_TYPE_PNG
+            icono = wx.Icon(ruta_icono, wx.BITMAP_TYPE_PNG)
+            self.SetIcon(icono)
+        else:
+            print(f"Advertencia: No se encontró el archivo de icono en {ruta_icono}")
+
+        # --------------------
+        # --------------------
+        # Pantalla de Bienvenida (AdvancedSplash)
+        # --------------------
+        # Asumiendo que la imagen está en la misma carpeta que este script:
+        bitmapDir = os.path.dirname(os.path.abspath(__file__))
+        pn = os.path.normpath(os.path.join(
+            bitmapDir,
+            "imagenes",
+            "advancedsplash.png"))
+        
+        if os.path.exists(pn):
+            bitmap = wx.Bitmap(pn, wx.BITMAP_TYPE_PNG)
+            shadow = wx.WHITE
+
+            # Creamos el Splash Screen. Se cerrará solo en 5000ms (5 segundos)
+            # Usamos None en lugar de self porque la ventana principal aún se está construyendo
+            self.splash = AS.AdvancedSplash(None, bitmap=bitmap, timeout=3000,
+                                            agwStyle=AS.AS_TIMEOUT |
+                                                     AS.AS_CENTER_ON_SCREEN |
+                                                     AS.AS_SHADOW_BITMAP,
+                                            shadowcolour=shadow)
+        else:
+            print(f"Advertencia: No se encontró la imagen en {pn}")
 
         # --------------------
         # Barra de menú
@@ -44,6 +94,16 @@ class MiVentana(wx.Frame):
             "&Acerca de"
         )
 
+        item_manual = menu_ayuda.Append(
+            wx.ID_ANY,
+            "&Manual De Usuario\tCtrl+3"
+        )
+
+        item_ayuda = menu_ayuda.Append(
+            wx.ID_ANY,
+            "&Guía de Ayuda\tCtrl+3"
+        )
+
         barrabotones.Append(menu_opciones, "&Opciones")
         barrabotones.Append(menu_ayuda, "&Ayuda")
 
@@ -66,6 +126,16 @@ class MiVentana(wx.Frame):
             label="Dos Variables (Cálculo Físico)"
         )
 
+        self.btn_manual = wx.Button(
+            panel,
+            label="Manual de Usuario"
+        )
+
+        self.btn_ayuda = wx.Button(
+            panel,
+            label="Guía de Ayuda"
+        )
+
         self.btn_cerrar = wx.Button(
             panel,
             label="Cerrar App"
@@ -80,6 +150,20 @@ class MiVentana(wx.Frame):
 
         sizer.Add(
             self.btn_dos_var,
+            0,
+            wx.ALL | wx.CENTER,
+            10
+        )
+
+        sizer.Add(
+            self.btn_manual,
+            0,
+            wx.ALL | wx.CENTER,
+            10
+        )
+
+        sizer.Add(
+            self.btn_ayuda,
             0,
             wx.ALL | wx.CENTER,
             10
@@ -107,6 +191,16 @@ class MiVentana(wx.Frame):
             self.on_abrir_dos_variables
         )
 
+        self.btn_manual.Bind(
+            wx.EVT_BUTTON,
+            self.on_manual
+        )
+
+        self.btn_ayuda.Bind(
+            wx.EVT_BUTTON,
+            self.on_ayuda
+        )
+
         self.btn_cerrar.Bind(
             wx.EVT_BUTTON,
             self.on_cerrar_app
@@ -125,6 +219,18 @@ class MiVentana(wx.Frame):
             wx.EVT_MENU,
             self.on_abrir_dos_variables,
             item_dos_var
+        )
+
+        self.Bind(
+            wx.EVT_MENU,
+            self.on_manual,
+            item_manual
+        )
+
+        self.Bind(
+            wx.EVT_MENU,
+            self.on_ayuda,
+            item_ayuda
         )
 
         self.Bind(
@@ -158,6 +264,12 @@ class MiVentana(wx.Frame):
             "Acerca de",
             wx.OK | wx.ICON_INFORMATION
         )
+
+    def on_manual(self, event):
+        abrir_manual(self)
+
+    def on_ayuda(self, event):
+        Ayuda(self)
 
     def on_cerrar_app(self, event):
         self.Close()
