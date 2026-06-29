@@ -61,7 +61,7 @@ def abrir_manual(parent_window):
     texto_ajustado = wordwrap(texto_guia, 460, wx.ClientDC(parent_window))
     
     # Llamamos a la ruta completa del componente
-    dlg = wx.Dialog(parent_window, title="Instructivo Cientifico", size=(540, 500))
+    dlg = wx.Dialog(parent_window, title="Manual de Usuario", size=(540, 500))
     panel=wx.Panel(dlg)
     txt_ctrl = wx.TextCtrl(panel, value=texto_ajustado, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH)
 
