@@ -33,17 +33,15 @@ class MiVentana(wx.Frame):
             "mi_logo.png")
         
         if os.path.exists(ruta_icono):
-            # Creamos el objeto Icon. Si usas un PNG, cambia wx.BITMAP_TYPE_ICO por wx.BITMAP_TYPE_PNG
+            # Creamos el objeto Icon. Si usa un PNG, cambia wx.BITMAP_TYPE_ICO por wx.BITMAP_TYPE_PNG
             icono = wx.Icon(ruta_icono, wx.BITMAP_TYPE_PNG)
             self.SetIcon(icono)
         else:
-            print(f"Advertencia: No se encontró el archivo de icono en {ruta_icono}")
+            print(f"No se encontró el archivo de icono en {ruta_icono}")
 
-        # --------------------
         # --------------------
         # Pantalla de Bienvenida (AdvancedSplash)
         # --------------------
-        # Asumiendo que la imagen está en la misma carpeta que este script:
         bitmapDir = os.path.dirname(os.path.abspath(__file__))
         pn = os.path.normpath(os.path.join(
             bitmapDir,
@@ -54,8 +52,8 @@ class MiVentana(wx.Frame):
             bitmap = wx.Bitmap(pn, wx.BITMAP_TYPE_PNG)
             shadow = wx.WHITE
 
-            # Creamos el Splash Screen. Se cerrará solo en 5000ms (5 segundos)
-            # Usamos None en lugar de self porque la ventana principal aún se está construyendo
+        # Creamos el Splash Screen. Se cerrará en 3000ms (3 segundos)
+        # Usamos None en lugar de self porque la ventana principal aún se está construyendo
             self.splash = AS.AdvancedSplash(None, bitmap=bitmap, timeout=3000,
                                             agwStyle=AS.AS_TIMEOUT |
                                                      AS.AS_CENTER_ON_SCREEN |

@@ -1,12 +1,27 @@
 import wx
 import wx.lib.dialogs 
 from wx.lib.wordwrap import wordwrap
+import os
 
 def abrir_manual(parent_window):
     """
     Muestra el texto largo de la guía en una ventana compacta
     con barra de desplazamiento vertical.
     """
+    bitmapDir = os.path.dirname(os.path.abspath(__file__))
+    # Cambia "mi_logo.ico" o "mi_logo.png" por el nombre real de tu archivo
+    ruta_icono = os.path.join(
+            bitmapDir,
+            "imagenes",
+            "manual.png")
+        
+    if os.path.exists(ruta_icono):
+            # Creamos el objeto Icon. Si usa un PNG, cambia wx.BITMAP_TYPE_ICO por wx.BITMAP_TYPE_PNG
+            icono = wx.Icon(ruta_icono, wx.BITMAP_TYPE_PNG)
+            parent_window.SetIcon(icono)
+    else:
+            print(f"No se encontró el archivo de icono en {ruta_icono}")
+
     texto_guia = (
         " GUÍA DE CÁLCULO MANUAL - PREPARACIÓN DE EXAMEN\n"
         " ===================================================\n"
@@ -61,7 +76,7 @@ def abrir_manual(parent_window):
     texto_ajustado = wordwrap(texto_guia, 460, wx.ClientDC(parent_window))
     
     # Llamamos a la ruta completa del componente
-    dlg = wx.Dialog(parent_window, title="Instructivo Cientifico", size=(540, 500))
+    dlg = wx.Dialog(parent_window, title="Manual de Usuario", size=(540, 500))
     panel=wx.Panel(dlg)
     txt_ctrl = wx.TextCtrl(panel, value=texto_ajustado, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH)
 
